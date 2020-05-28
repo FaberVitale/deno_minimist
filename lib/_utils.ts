@@ -1,5 +1,4 @@
 export function hasKey(obj: Record<string, any>, keys: string[]) {
-  console.log(obj, keys);
   const len = keys.length;
   let o = obj;
 

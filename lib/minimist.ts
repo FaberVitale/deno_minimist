@@ -4,8 +4,7 @@ import { isNumberLike, hasKey } from "./_utils.ts";
 type Flags = {
   bools: Record<string, boolean>;
   strings: Record<string, boolean>;
-  allBools?: boolean;
-  unknownFn?: null | NonNullable<MinimistOptions["unknown"]>;
+  allBools: boolean;
 };
 
 type MinimistContext = {
@@ -46,7 +45,7 @@ function computeAliases(opts: MinimistOptions): Record<string, string[]> {
 function createMinimistContext(args: string[], opts?: MinimistOptions) {
   const options = opts || {};
   const defaults = options.default || {};
-  const flags: Flags = { bools: {}, strings: {}, unknownFn: null };
+  const flags: Flags = { bools: {}, strings: {}, allBools: false };
   const aliases: Record<string, string[]> = computeAliases(options);
 
   const output: MinimistContext = {
@@ -186,8 +185,8 @@ function setArg(
   val: string | number | boolean,
   arg?: string,
 ) {
-  if (arg && ctx.flags.unknownFn && !argDefined(ctx, key, arg)) {
-    if (ctx.flags.unknownFn(arg) === false) {
+  if (arg && ctx.unknownFn && !argDefined(ctx, key, arg)) {
+    if (ctx.unknownFn(arg) === false) {
       return;
     }
   }
@@ -307,7 +306,7 @@ function consumeArgs(ctx: MinimistContext) {
         }
       }
     } else {
-      if (!flags.unknownFn || flags.unknownFn(arg) !== false) {
+      if (!ctx.unknownFn || ctx.unknownFn(arg) !== false) {
         argv._.push(
           flags.strings["_"] || (!isNumberLike(arg) ? arg : Number(arg)) as any,
         );
@@ -331,9 +330,9 @@ function consumeArgs(ctx: MinimistContext) {
   });
 
   if (ctx.options["--"]) {
-    argv["--"] = ctx.notFlags;
+    argv["--"] = [...ctx.notFlags];
   } else {
-    argv._.push.apply(argv._, ctx.notFlags);
+    argv._.push(...ctx.notFlags);
   }
 
   return argv;
