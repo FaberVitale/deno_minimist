@@ -1,6 +1,6 @@
 # Deno minimist
 
-Port and re-write in typescript of the command line argument parsing library [minimist](https://github.com/substack/minimist).
+Port in typescript and [deno](https://deno.land/) of the command line argument parsing library [minimist](https://github.com/substack/minimist).
 
 ---
 

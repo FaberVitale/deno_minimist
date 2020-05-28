@@ -42,14 +42,14 @@ function computeAliases(opts: MinimistOptions): Record<string, string[]> {
   return aliases;
 }
 
-function createMinimistContext(args: string[], opts?: MinimistOptions) {
+function createMinimistContext(inputArgs: string[], opts?: MinimistOptions) {
   const options = opts || {};
   const defaults = options.default || {};
   const flags: Flags = { bools: {}, strings: {}, allBools: false };
   const aliases: Record<string, string[]> = computeAliases(options);
 
   const output: MinimistContext = {
-    args,
+    args: inputArgs,
     options,
     defaults,
     flags,
@@ -76,9 +76,7 @@ function createMinimistContext(args: string[], opts?: MinimistOptions) {
   }
 
   if (options.string) {
-    const strings = typeof options.string === "string"
-      ? [options.string]
-      : [...options.string];
+    const strings = [].concat(options.string as any);
 
     for (let i = 0, len = options.string.length; i < len; i++) {
       const key = strings[i];
@@ -94,8 +92,8 @@ function createMinimistContext(args: string[], opts?: MinimistOptions) {
   }
 
   if (output.args.indexOf("--") !== -1) {
-    output.notFlags = args.slice(args.indexOf("--") + 1);
-    output.args = args.slice(0, args.indexOf("--"));
+    output.notFlags = inputArgs.slice(inputArgs.indexOf("--") + 1);
+    output.args = inputArgs.slice(0, inputArgs.indexOf("--"));
   }
 
   return output;
@@ -330,9 +328,9 @@ function consumeArgs(ctx: MinimistContext) {
   });
 
   if (ctx.options["--"]) {
-    argv["--"] = [...ctx.notFlags];
+    argv["--"] = ctx.notFlags;
   } else {
-    argv._.push(...ctx.notFlags);
+    argv._.push.apply(argv._, ctx.notFlags);
   }
 
   return argv;
