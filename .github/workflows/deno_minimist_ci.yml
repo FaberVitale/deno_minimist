@@ -6,7 +6,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: oak server tests
+    name: deno_minimist
     runs-on: ubuntu-latest
     env:
         CI: true
