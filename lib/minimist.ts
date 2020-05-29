@@ -1,4 +1,4 @@
-import { MinimistOptions, ParsedArguments } from "../types/minimist.d.ts";
+import { MinimistOptions, ParsedArgs } from "../types/minimist.d.ts";
 import { isNumberLike, hasKey } from "./_utils.ts";
 
 type Flags = {
@@ -13,7 +13,7 @@ type MinimistContext = {
   flags: Flags;
   aliases: Record<string, string[]>;
   unknownFn: null | NonNullable<MinimistOptions["unknown"]>;
-  argv: ParsedArguments;
+  argv: ParsedArgs;
   args: string[];
   notFlags: string[];
 };
@@ -121,7 +121,7 @@ function setKey(
   { flags }: MinimistContext,
   obj: Record<string, any>,
   keys: string[],
-  value: string | number | boolean,
+  value: unknown,
 ) {
   let o = obj;
   const len = keys.length;
@@ -174,7 +174,7 @@ function setKey(
 function setArg(
   ctx: MinimistContext,
   key: string,
-  val: string | number | boolean,
+  val: unknown,
   arg?: string,
 ) {
   if (arg && ctx.unknownFn && !argDefined(ctx, key, arg)) {
@@ -334,7 +334,7 @@ function consumeArgs(ctx: MinimistContext) {
   return argv;
 }
 
-export default function minimist<T extends ParsedArguments>(
+export default function minimist<T extends ParsedArgs>(
   args: string[],
   opts?: MinimistOptions,
 ): T {
