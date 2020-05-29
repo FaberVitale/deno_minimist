@@ -3,6 +3,8 @@
 
 Port in typescript and [deno](https://deno.land/) of the argument parsing library [minimist](https://github.com/substack/minimist).
 
+---
+
 ## example
 
 ```typescript
@@ -38,7 +40,7 @@ parseArgs(Deno.args);
 
 ## const argv = parseArgs(args, opts={})
 
-Return an argument object `argv` populated with the array arguments from `args`.
+Returns an argument object `argv` populated with the array arguments from `args`.
 
 `argv._` contains all the arguments that didn't have an option associated with
 them.
@@ -81,6 +83,31 @@ defined in the `opts` configuration object. If the function returns `false`, the
 unknown option is not added to `argv`.
 
 ---
+
+## Relevant changes compared to minimist
+
+* An explicit TypeError is raised if the input is falsy.
+
+* `--constructor` option is supported.
+
+* Added few tests.
+
+* Improved accuracy and ergonomics of typescript types.
+
+* The returned payload is an object created using `Object.create(null)`, hence 
+  does not have instance methods like `toString`:
+  
+```typescript
+// parse(Deno.args).toString() : Uncaught TypeError: parse(...).toString is not a function
+
+parse(Deno.args).toString(); // BAD - `Uncaught TypeError`
+parse(Deno.args) + "";       // BAD - `Uncaught TypeError`
+
+Object.prototype.toString.call(parse(Deno.args)); // OK `[object Object]`
+
+JSON.stringify(parse(['--foo'])); // OK `{"_":[],"foo":true}`
+```
+
 
 ## License
 

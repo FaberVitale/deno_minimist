@@ -34,12 +34,12 @@ export interface MinimistOptions {
   alias?: { [key: string]: string | string[] };
 
   /**
-     * An object mapping string argument names to default values
-     */
+   * An object mapping string argument names to default values.
+   */
   default?: { [key: string]: unknown };
 
   /**
-   * When true, populate argv._ with everything after the first non-option
+   * When true, populate argv._ with everything after the first non-option.
    */
   stopEarly?: boolean;
 
@@ -59,5 +59,25 @@ export interface MinimistOptions {
 }
 
 export interface Minimist {
+  /**
+   * Parses an array of command line arguments.
+   * 
+   * @example
+   * ```typescript
+   * import parse, { WithParsedArgs } from "../mod.ts";
+   * 
+   * const defaults = {
+   *   version: "v1.0.0",
+   *   port: 3000,
+   * };
+   * 
+   * const argv = parse<WithParsedArgs<Record<keyof typeof defaults, unknown>>>(
+   *   Deno.args,
+   *   {
+   *     default: defaults,
+   *   },
+   * );
+   * ```
+   */
   <T extends ParsedArgs>(args: string[], options?: MinimistOptions): T;
 }

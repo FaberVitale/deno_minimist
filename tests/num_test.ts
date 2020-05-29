@@ -1,5 +1,5 @@
 import { assertEquals } from "../dev_deps.ts";
-import parse from "../lib/minimist.ts";
+import parse from "../mod.ts";
 
 Deno.test({
   name: "nums",

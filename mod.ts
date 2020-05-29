@@ -4,4 +4,4 @@ export type {
   Minimist,
   WithParsedArgs,
 } from "./types/minimist.d.ts";
-export { default } from "./lib/minimist.ts";
+export { parse as default } from "./lib/minimist.ts";

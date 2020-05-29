@@ -23,6 +23,7 @@ Deno.test({
     const argv = parse<ParseOutput>(
       ["--x", "4", "--x", "5", "--x.__proto__.z", "789"],
     );
+
     assertEquals(({} as any).z, undefined);
     assertEquals(argv.x, [4, 5]);
     assertEquals(argv?.x?.z, undefined);

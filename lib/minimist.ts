@@ -1,4 +1,4 @@
-import { MinimistOptions, ParsedArgs } from "../types/minimist.d.ts";
+import { MinimistOptions, ParsedArgs, Minimist } from "../types/minimist.d.ts";
 import { isNumberLike, hasKey } from "./_utils.ts";
 
 type Flags = {
@@ -334,7 +334,7 @@ function consumeArgs(ctx: MinimistContext) {
   return argv;
 }
 
-export default function minimist<T extends ParsedArgs>(
+export const parse: Minimist = function parse<T extends ParsedArgs>(
   args: string[],
   opts?: MinimistOptions,
 ): T {
@@ -345,4 +345,4 @@ export default function minimist<T extends ParsedArgs>(
   const ctx = createMinimistContext(args, opts);
 
   return consumeArgs(ctx) as T;
-}
+};
