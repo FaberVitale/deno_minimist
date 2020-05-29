@@ -3,7 +3,7 @@ export function hasKey(obj: Record<string, any>, keys: string[]) {
   let o = obj;
 
   for (let i = 0; i < len - 1; i++) {
-    o = o[keys[i]] || {};
+    o = o[keys[i]] || Object.create(null);
   }
 
   return keys[len - 1] in o;

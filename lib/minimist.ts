@@ -19,7 +19,7 @@ type MinimistContext = {
 };
 
 function computeAliases(opts: MinimistOptions): Record<string, string[]> {
-  const aliases: Record<string, string[]> = {};
+  const aliases: Record<string, string[]> = Object.create(null);
 
   if (!opts.alias) {
     return aliases;
@@ -43,9 +43,14 @@ function computeAliases(opts: MinimistOptions): Record<string, string[]> {
 }
 
 function createMinimistContext(inputArgs: string[], opts?: MinimistOptions) {
-  const options = opts || {};
-  const defaults = options.default || {};
-  const flags: Flags = { bools: {}, strings: {}, allBools: false };
+  const options = opts || Object.create(null);
+  const defaults = Object.assign(Object.create(null), options.default);
+  const flags: Flags = {
+    bools: Object.create(null),
+    strings: Object.create(null),
+    allBools: false,
+  };
+
   const aliases: Record<string, string[]> = computeAliases(options);
 
   const output: MinimistContext = {
@@ -55,7 +60,7 @@ function createMinimistContext(inputArgs: string[], opts?: MinimistOptions) {
     flags,
     aliases,
     unknownFn: null,
-    argv: { _: [] },
+    argv: Object.assign(Object.create(null), { _: [] }),
     notFlags: [],
   };
 
@@ -129,18 +134,7 @@ function setKey(
     }
 
     if (o[key] === undefined) {
-      o[key] = {};
-    }
-
-    if (
-      o[key] === Object.prototype || o[key] === Number.prototype ||
-      o[key] === String.prototype
-    ) {
-      o[key] = {};
-    }
-
-    if (o[key] === Array.prototype) {
-      o[key] = [];
+      o[key] = Object.create(null);
     }
 
     o = o[key];
@@ -157,7 +151,7 @@ function setKey(
     o === Number.prototype ||
     o === String.prototype
   ) {
-    o = {};
+    o = Object.create(null);
   }
 
   if (o === Array.prototype) {
@@ -305,9 +299,13 @@ function consumeArgs(ctx: MinimistContext) {
       }
     } else {
       if (!ctx.unknownFn || ctx.unknownFn(arg) !== false) {
-        argv._.push(
-          flags.strings["_"] || (!isNumberLike(arg) ? arg : Number(arg)) as any,
-        );
+        // `flags.strings["_"]` determines if the non options
+        // values can be casted to string.
+        const nonOptionArg = (flags.strings["_"] || !isNumberLike(arg))
+          ? arg
+          : Number(arg);
+
+        argv._.push(nonOptionArg);
       }
 
       if (options.stopEarly) {
