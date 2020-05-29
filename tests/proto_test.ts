@@ -1,10 +1,14 @@
 import { assertEquals } from "../dev_deps.ts";
-import parse from "../lib/minimist.ts";
+import parse, { WithParsedArgs } from "../mod.ts";
+
+type ParseOutput = WithParsedArgs<
+  { x?: Record<string, unknown>; y?: Record<string, unknown> }
+>;
 
 Deno.test({
   name: "proto pollution",
   fn: () => {
-    const argv = parse(["--__proto__.x", "123"]);
+    const argv = parse<ParseOutput>(["--__proto__.x", "123"]);
 
     assertEquals(({} as any).x, undefined);
     // https://github.com/denoland/deno/issues/5133#issuecomment-627755122
@@ -16,7 +20,9 @@ Deno.test({
 Deno.test({
   name: "proto pollution (array)",
   fn: () => {
-    const argv = parse(["--x", "4", "--x", "5", "--x.__proto__.z", "789"]);
+    const argv = parse<ParseOutput>(
+      ["--x", "4", "--x", "5", "--x.__proto__.z", "789"],
+    );
     assertEquals(({} as any).z, undefined);
     assertEquals(argv.x, [4, 5]);
     assertEquals(argv?.x?.z, undefined);
@@ -27,22 +33,22 @@ Deno.test({
 Deno.test({
   name: "proto pollution (number)",
   fn: () => {
-    const argv = parse(["--x", "5", "--x.__proto__.z", "100"]);
+    const argv = parse<ParseOutput>(["--x", "5", "--x.__proto__.z", "100"]);
     assertEquals(({} as any).z, undefined);
     assertEquals((4 as any).z, undefined);
     assertEquals(argv.x, 5);
-    assertEquals(argv?.x?.z, undefined);
+    assertEquals(argv?.x?.z as any, undefined);
   },
 });
 
 Deno.test({
   name: "proto pollution (string)",
   fn: () => {
-    const argv = parse(["--x", "abc", "--x.__proto__.z", "def"]);
+    const argv = parse<ParseOutput>(["--x", "abc", "--x.__proto__.z", "def"]);
     assertEquals(({} as any).z, undefined);
     assertEquals(("..." as any).z, undefined);
     assertEquals(argv.x, "abc");
-    assertEquals(argv?.x?.z, undefined);
+    assertEquals(argv?.x?.z as any, undefined);
   },
 });
 
