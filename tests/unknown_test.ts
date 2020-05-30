@@ -39,7 +39,7 @@ Deno.test(
         return false;
       }
 
-      var argv = parse(["--honk", "--tacos=good", "cow", "-p", "55"], {
+      const argv = parse(["--honk", "--tacos=good", "cow", "-p", "55"], {
         boolean: true,
         unknown: unknownFn,
       });

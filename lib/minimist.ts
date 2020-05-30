@@ -209,8 +209,8 @@ function consumeArgs(ctx: MinimistContext) {
     );
   }
 
-  for (var i = 0; i < args.length; i++) {
-    var arg = args[i];
+  for (let i = 0, len = args.length; i < len; i++) {
+    const arg = args[i];
 
     if (/^--.+=/.test(arg)) {
       // Using [\s\S] instead of . because js doesn't support the
@@ -226,11 +226,11 @@ function consumeArgs(ctx: MinimistContext) {
 
       setArg(ctx, key, value, arg);
     } else if (/^--no-.+/.test(arg)) {
-      var key = arg.match(/^--no-(.+)/)![1];
+      const key = arg.match(/^--no-(.+)/)![1];
       setArg(ctx, key, false, arg);
     } else if (/^--.+/.test(arg)) {
-      var key = arg.match(/^--(.+)/)![1];
-      var next = args[i + 1];
+      const key = arg.match(/^--(.+)/)![1];
+      const next = args[i + 1];
       if (
         next !== undefined && !/^-/.test(next) &&
         !flags.bools[key] &&
@@ -246,11 +246,11 @@ function consumeArgs(ctx: MinimistContext) {
         setArg(ctx, key, flags.strings[key] ? "" : true, arg);
       }
     } else if (/^-[^-]+/.test(arg)) {
-      var letters = arg.slice(1, -1).split("");
+      const letters = arg.slice(1, -1).split("");
 
-      var broken = false;
-      for (var j = 0; j < letters.length; j++) {
-        var next = arg.slice(j + 2);
+      let broken = false;
+      for (let j = 0; j < letters.length; j++) {
+        const next = arg.slice(j + 2);
 
         if (next === "-") {
           setArg(ctx, letters[j], next, arg);
@@ -281,7 +281,7 @@ function consumeArgs(ctx: MinimistContext) {
         }
       }
 
-      var key = arg.slice(-1)[0];
+      const key = arg.slice(-1)[0];
       if (!broken && key !== "-") {
         if (
           args[i + 1] && !/^(-|--)[^-]/.test(args[i + 1]) &&

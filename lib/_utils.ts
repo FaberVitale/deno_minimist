@@ -1,12 +1,12 @@
-export function hasKey(obj: Record<string, any>, keys: string[]) {
-  const len = keys.length;
+export function hasKey(obj: Record<string, unknown>, keys: string[]) {
+  const lastIndex = keys.length - 1;
   let o = obj;
 
-  for (let i = 0; i < len - 1; i++) {
+  for (let i = 0; i < lastIndex; i++) {
     o = o[keys[i]] || Object.create(null);
   }
 
-  return keys[len - 1] in o;
+  return keys[lastIndex] in o;
 }
 
 export function isNumberLike(x: unknown) {

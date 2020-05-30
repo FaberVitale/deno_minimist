@@ -1,5 +1,5 @@
 import { assertEquals } from "../dev_deps.ts";
-import parse from "../mod.ts";
+import parse, { WithParsedArgs } from "../mod.ts";
 
 Deno.test({
   name: "flag boolean default false",
@@ -41,22 +41,48 @@ Deno.test({
 });
 
 Deno.test({
+  name: "boolean flags combined",
+  fn: () => {
+    type BoolFlags = Record<"x" | "y" | "z", boolean>;
+
+    const argv = parse<WithParsedArgs<BoolFlags>>(
+      ["-xyz", "-z", "one", "two", "three"],
+      {
+        boolean: ["x", "y", "z", "w"],
+      },
+    );
+
+    assertEquals(argv, {
+      x: true,
+      y: true,
+      z: true,
+      w: false,
+      _: ["one", "two", "three"],
+    });
+
+    assertEquals(typeof argv.x, "boolean");
+    assertEquals(typeof argv.y, "boolean");
+    assertEquals(typeof argv.z, "boolean");
+  },
+});
+
+Deno.test({
   name: "boolean and alias with chainable api",
   fn: () => {
-    var aliased = ["-h", "derp"];
-    var regular = ["--herp", "derp"];
-    var opts = {
+    const aliased = ["-h", "derp"];
+    const regular = ["--herp", "derp"];
+    const opts = {
       herp: { alias: "h", boolean: true },
     };
-    var aliasedArgv = parse(aliased, {
+    const aliasedArgv = parse(aliased, {
       boolean: "herp",
       alias: { h: "herp" },
     });
-    var propertyArgv = parse(regular, {
+    const propertyArgv = parse(regular, {
       boolean: "herp",
       alias: { h: "herp" },
     });
-    var expected = {
+    const expected = {
       herp: true,
       h: true,
       "_": ["derp"],
@@ -70,15 +96,15 @@ Deno.test({
 Deno.test({
   name: "boolean and alias with options hash",
   fn: () => {
-    var aliased = ["-h", "derp"];
-    var regular = ["--herp", "derp"];
-    var opts = {
+    const aliased = ["-h", "derp"];
+    const regular = ["--herp", "derp"];
+    const opts = {
       alias: { "h": "herp" },
       boolean: "herp",
     };
-    var aliasedArgv = parse(aliased, opts);
-    var propertyArgv = parse(regular, opts);
-    var expected = {
+    const aliasedArgv = parse(aliased, opts);
+    const propertyArgv = parse(regular, opts);
+    const expected = {
       herp: true,
       h: true,
       "_": ["derp"],
@@ -92,17 +118,17 @@ Deno.test({
 Deno.test({
   name: "boolean and alias array with options hash",
   fn: () => {
-    var aliased = ["-h", "derp"];
-    var regular = ["--herp", "derp"];
-    var alt = ["--harp", "derp"];
-    var opts = {
+    const aliased = ["-h", "derp"];
+    const regular = ["--herp", "derp"];
+    const alt = ["--harp", "derp"];
+    const opts = {
       alias: { "h": ["herp", "harp"] },
       boolean: "h",
     };
-    var aliasedArgv = parse(aliased, opts);
-    var propertyArgv = parse(regular, opts);
-    var altPropertyArgv = parse(alt, opts);
-    var expected = {
+    const aliasedArgv = parse(aliased, opts);
+    const propertyArgv = parse(regular, opts);
+    const altPropertyArgv = parse(alt, opts);
+    const expected = {
       harp: true,
       herp: true,
       h: true,
@@ -118,15 +144,15 @@ Deno.test({
 Deno.test({
   name: "boolean and alias using explicit true",
   fn: () => {
-    var aliased = ["-h", "true"];
-    var regular = ["--herp", "true"];
-    var opts = {
+    const aliased = ["-h", "true"];
+    const regular = ["--herp", "true"];
+    const opts = {
       alias: { h: "herp" },
       boolean: "h",
     };
-    var aliasedArgv = parse(aliased, opts);
-    var propertyArgv = parse(regular, opts);
-    var expected = {
+    const aliasedArgv = parse(aliased, opts);
+    const propertyArgv = parse(regular, opts);
+    const expected = {
       herp: true,
       h: true,
       "_": [],
@@ -141,7 +167,7 @@ Deno.test({
 Deno.test({
   name: "boolean and --x=true",
   fn: () => {
-    var parsed = parse(["--boool", "--other=true"], {
+    let parsed = parse(["--boool", "--other=true"], {
       boolean: "boool",
     });
 
@@ -160,7 +186,7 @@ Deno.test({
 Deno.test({
   name: "boolean --boool=true",
   fn: () => {
-    var parsed = parse(["--boool=true"], {
+    const parsed = parse(["--boool=true"], {
       default: {
         boool: false,
       },
@@ -174,7 +200,7 @@ Deno.test({
 Deno.test({
   name: "boolean --boool=false",
   fn: () => {
-    var parsed = parse(["--boool=false"], {
+    const parsed = parse(["--boool=false"], {
       default: {
         boool: true,
       },
@@ -188,8 +214,8 @@ Deno.test({
 Deno.test({
   name: "boolean using something similar to true",
   fn: () => {
-    var result = parse(["-h", "true.txt"], { boolean: "h" });
-    var expected = {
+    const result = parse(["-h", "true.txt"], { boolean: "h" });
+    const expected = {
       h: true,
       "_": ["true.txt"],
     };

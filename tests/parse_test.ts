@@ -60,7 +60,7 @@ Deno.test({
 Deno.test({
   name: "flag boolean",
   fn: () => {
-    var argv = parse(["-t", "moo"], { boolean: "t" });
+    const argv = parse(["-t", "moo"], { boolean: "t" });
     assertEquals(argv, { t: true, _: ["moo"] });
     assertEquals(typeof argv.t, "boolean");
   },
@@ -69,7 +69,7 @@ Deno.test({
 Deno.test({
   name: "flag boolean value",
   fn: () => {
-    var argv = parse(["--verbose", "false", "moo", "-t", "true"], {
+    const argv = parse(["--verbose", "false", "moo", "-t", "true"], {
       boolean: ["t", "verbose"],
       default: { verbose: true },
     });
@@ -88,26 +88,24 @@ Deno.test({
 Deno.test({
   name: "newlines in params",
   fn: () => {
-    var args = parse(["-s", "X\nX"]);
-    assertEquals(args, { _: [], s: "X\nX" });
+    assertEquals(parse(["-s", "X\nX"]), { _: [], s: "X\nX" });
 
     // reproduce in bash:
     // VALUE="new
     // line"
     // node program.js --s="$VALUE"
-    args = parse(["--s=X\nX"]);
-    assertEquals(args, { _: [], s: "X\nX" });
+    assertEquals(parse(["--s=X\nX"]), { _: [], s: "X\nX" });
   },
 });
 
 Deno.test({
   name: "strings",
   fn: () => {
-    var s = parse(["-s", "0001234"], { string: "s" }).s;
+    const s = parse(["-s", "0001234"], { string: "s" }).s;
     assertEquals(s, "0001234");
     assertEquals(typeof s, "string");
 
-    var x = parse(["-x", "56"], { string: "x" }).x;
+    const x = parse(["-x", "56"], { string: "x" }).x;
     assertEquals(x, "56");
     assertEquals(typeof x, "string");
   },
@@ -116,7 +114,7 @@ Deno.test({
 Deno.test({
   name: "stringArgs",
   fn: () => {
-    var s = parse(["  ", "  "], { string: "_" })._;
+    const s = parse(["  ", "  "], { string: "_" })._;
     assertEquals(s.length, 2);
     assertEquals(typeof s[0], "string");
     assertEquals(s[0], "  ");
