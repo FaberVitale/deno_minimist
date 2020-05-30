@@ -64,7 +64,7 @@ export interface Minimist {
    * 
    * @example
    * ```typescript
-   * import parse, { WithParsedArgs } from "../mod.ts";
+   * import parse, { WithParsedArgs } from "https://deno.land/x/deno_minimist@1.0.0/mod.ts";
    * 
    * const defaults = {
    *   version: "v1.0.0",

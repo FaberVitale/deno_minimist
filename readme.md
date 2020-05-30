@@ -9,7 +9,8 @@ Port & rewrite to [deno](https://deno.land/) & [typescript](https://www.typescri
 ## example
 
 ```typescript
-import parseArgs from './mod.ts';
+// parse.ts
+import parseArgs from 'https://deno.land/x/deno_minimist@1.0.0/mod.ts';
 
 parseArgs(Deno.args);
 ```
@@ -34,7 +35,7 @@ $ deno run ./examples/parse.ts -x 3 -y 4 -n5 -abc --beep=boop foo bar baz
 ## API
 
 ```typescript
-import parseArgs from './mod.ts';
+import parseArgs from 'https://deno.land/x/deno_minimist@1.0.0/mod.ts';
 
 parseArgs(Deno.args);
 ```
@@ -72,7 +73,8 @@ first non-option
 and `argv['--']` with everything after the `--`. Here's an example:
 
 ```typescript
-import parseArgs from './mod.ts';
+import parseArgs from 'https://deno.land/x/deno_minimist@1.0.0/mod.ts';
+
 parseArgs('one two three -- four five --six'.split(' '), {'--': true });
 ```
 
@@ -99,10 +101,10 @@ unknown option is not added to `argv`.
   does not have instance methods like `toString`:
   
 ```typescript
-// parse(Deno.args).toString() : Uncaught TypeError: parse(...).toString is not a function
+import parseArgs from 'https://deno.land/x/deno_minimist@1.0.0/mod.ts';
 
-parse(Deno.args).toString(); // BAD - `Uncaught TypeError`
-parse(Deno.args) + "";       // BAD - `Uncaught TypeError`
+parse(Deno.args).toString(); // BAD - `TypeError: parse(...).toString is not a function`
+parse(Deno.args) + "";       // BAD - `TypeError: parse(...).toString is not a function`
 
 Object.prototype.toString.call(parse(Deno.args)); // OK `[object Object]`
 
