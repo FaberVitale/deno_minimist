@@ -1,4 +1,4 @@
-import { MinimistOptions, ParsedArgs, Minimist } from "../types/minimist.d.ts";
+import type { MinimistOptions, ParsedArgs, Minimist } from "../types/minimist.d.ts";
 import { isNumberLike, hasKey } from "./_utils.ts";
 
 type Flags = {
