@@ -1,4 +1,5 @@
-import parse, { WithParsedArgs } from "../mod.ts";
+import parse from "../mod.ts";
+import type { WithParsedArgs } from "../mod.ts";
 
 const argv = parse<
   WithParsedArgs<Record<"h" | "H", string | number | boolean>>

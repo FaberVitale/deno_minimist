@@ -1,5 +1,6 @@
 import { assertEquals } from "../dev_deps.ts";
-import parse, { WithParsedArgs } from "../mod.ts";
+import parse from "../mod.ts";
+import type  { WithParsedArgs }  from "../mod.ts"
 
 type Output = WithParsedArgs<{ a?: { b?: unknown }; aa?: { bb?: unknown } }>;
 
