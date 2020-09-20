@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
         CI: true
-        DENO_VERSION: v1.0.2
+        DENO_VERSION: v1.4.1
     steps:
       - name: clone repository
         uses: actions/checkout@v2
