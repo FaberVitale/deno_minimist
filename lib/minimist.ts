@@ -1,5 +1,9 @@
-import type { MinimistOptions, ParsedArgs, Minimist } from "../types/minimist.d.ts";
-import { isNumberLike, hasKey } from "./_utils.ts";
+import type {
+  Minimist,
+  MinimistOptions,
+  ParsedArgs,
+} from "../types/minimist.d.ts";
+import { hasKey, isNumberLike } from "./_utils.ts";
 
 type Flags = {
   bools: Record<string, boolean>;
