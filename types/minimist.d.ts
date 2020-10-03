@@ -64,8 +64,8 @@ export interface Minimist {
    * 
    * @example
    * ```typescript
-   * import parse from "https://deno.land/x/deno_minimist@v1.0.1/mod.ts";
-   * import type { WithParsedArgs } from "https://deno.land/x/deno_minimist@v1.0.1/mod.ts";
+   * import parse from "https://deno.land/x/deno_minimist@v1.0.2/mod.ts";
+   * import type { WithParsedArgs } from "https://deno.land/x/deno_minimist@v1.0.2/mod.ts";
    * const defaults = {
    *   version: "v1.0.0",
    *   port: 3000,
